@@ -5,7 +5,8 @@ from sklearn.metrics import (
 
 import logging
 from pathlib import Path
-
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 import joblib
 import pandas as pd
 from sklearn.ensemble import IsolationForest
@@ -15,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 DATA_PATH = "ml/data/creditcard.csv"
-MODEL_PATH = Path("ml/models/isolation_forest.pkl")
+MODEL_PATH = Path("ml/models/fraud_detection_pipeline.pkl")
 
 
 def load_data():
@@ -38,29 +39,40 @@ def train_model(df):
 
     logger.info("Training Isolation Forest...")
 
-    model = IsolationForest(
-        contamination=0.002,
-        random_state=42
+    pipeline = Pipeline(
+        steps=[
+            (
+                "scaler",
+                StandardScaler()
+            ),
+            (
+                "model",
+                IsolationForest(
+                    contamination=0.002,
+                    random_state=42
+                )
+            )
+        ]
     )
 
-    model.fit(X_train)
+    pipeline.fit(X_train)
 
     logger.info("Training completed.")
 
-    return model, X_test, y_test
+    return pipeline, X_test, y_test
 
-def evaluate_model(model, X_test, y_test):
-    predictions = model.predict(X_test)
+def evaluate_model(pipeline, X_test, y_test):
+    predictions = pipeline.predict(X_test)
 
     predictions = (predictions == -1).astype(int)
 
     print(classification_report(y_test, predictions))
     print(confusion_matrix(y_test, predictions))
 
-def save_model(model):
+def save_model(pipeline):
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-    joblib.dump(model, MODEL_PATH)
+    joblib.dump(pipeline, MODEL_PATH)
 
     logger.info(f"Model saved to {MODEL_PATH}")
 

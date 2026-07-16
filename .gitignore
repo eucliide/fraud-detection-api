@@ -12,6 +12,12 @@ __pycache__/
 .vscode/
 .idea/
 
+# ML models
+ml/models/*.pkl
+
+# ML data
+ml/data/*.csv
+
 # OS files
 .DS_Store
 Thumbs.db
