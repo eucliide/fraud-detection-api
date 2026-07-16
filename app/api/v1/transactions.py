@@ -3,11 +3,14 @@ import logging
 from fastapi import APIRouter
 
 from app.schemas.transaction import TransactionRequest
+from app.services.fraud_service import FraudDetectionService
 
 
 router = APIRouter()
 
 logger = logging.getLogger(__name__)
+
+fraud_service = FraudDetectionService()
 
 
 @router.post("/transactions")
@@ -16,10 +19,13 @@ def analyze_transaction(
 ):
 
     logger.info(
-        "Transaction received for analysis"
+        "Transaction received"
     )
 
-    return {
-        "message": "Transaction accepted",
-        "transaction": transaction
-    }
+
+    result = fraud_service.analyze_transaction(
+        transaction
+    )
+
+
+    return result
