@@ -1,46 +1,22 @@
-import logging
-
-from app.schemas.transaction import TransactionRequest
-
-
-logger = logging.getLogger(__name__)
+from app.services.ml_service import MLService
 
 
 class FraudDetectionService:
 
+    def __init__(self):
+        self.ml_service = MLService()
 
-    def analyze_transaction(
-            self,
-            transaction: TransactionRequest
-    ):
 
-        logger.info(
-            "Analyzing transaction"
+    def analyze_transaction(self, transaction):
+
+        prediction = self.ml_service.predict(
+            transaction
         )
 
-        # Temporary logic
-        # ML model will replace this later
-
-        risk_score = 0.10
-
-        if transaction.amount > 1000:
-            risk_score = 0.80
-
+        is_fraud = prediction == -1
 
         return {
-            "risk_score": risk_score,
-            "decision": self._make_decision(
-                risk_score
-            )
+            "is_fraud": is_fraud,
+            "risk_level": "HIGH" if is_fraud else "LOW",
+            "model_prediction": prediction
         }
-
-
-    def _make_decision(
-            self,
-            risk_score: float
-    ):
-
-        if risk_score >= 0.7:
-            return "high_risk"
-
-        return "low_risk"
