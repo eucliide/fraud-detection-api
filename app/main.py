@@ -1,9 +1,11 @@
 from fastapi import FastAPI
+from app.core.config import settings
+
 
 app = FastAPI(
-    title="Fraud Detection API",
-    version="1.0.0",
-    description="Real-time fraud detection service using machine learning."
+    title=settings.app_name,
+    version=settings.app_version,
+    description="Real-Time Fraud Detection Platform"
 )
 
 
