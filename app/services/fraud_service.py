@@ -9,14 +9,23 @@ class FraudDetectionService:
 
     def analyze_transaction(self, transaction):
 
+        print("FRAUD SERVICE RECEIVED:")
+        print(transaction)
+
+        ml_transaction = transaction.copy()
+
+        ml_transaction["Amount"] = ml_transaction.pop("amount")
+
+        print("ML TRANSACTION:")
+        print(ml_transaction)
+
         prediction = self.ml_service.predict(
-            transaction
+            ml_transaction
         )
 
-        is_fraud = prediction == -1
+        is_fraud = bool(prediction == -1)
 
         return {
             "is_fraud": is_fraud,
-            "risk_level": "HIGH" if is_fraud else "LOW",
-            "model_prediction": prediction
+            "risk_level": "HIGH" if is_fraud else "LOW"
         }

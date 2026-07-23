@@ -2,6 +2,8 @@ from pydantic import BaseModel
 
 
 class TransactionRequest(BaseModel):
+
+    amount: float
     V1: float
     V2: float
     V3: float
@@ -30,4 +32,3 @@ class TransactionRequest(BaseModel):
     V26: float
     V27: float
     V28: float
-    Amount: float

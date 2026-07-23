@@ -27,7 +27,7 @@ def load_data():
 
 
 def train_model(df):
-    X = df.drop(columns=["Class"])
+    X = df.drop(columns=["Class", "Time"])
     y = df["Class"]
 
     X_train, X_test, y_train, y_test = train_test_split(

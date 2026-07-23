@@ -1,7 +1,7 @@
 import logging
 
 from fastapi import FastAPI
-
+from app.api.routes import fraud
 from app.api.v1.router import router
 from app.core.config import settings
 from app.core.logging import setup_logging
@@ -18,10 +18,8 @@ app = FastAPI(
     description="Real-Time Fraud Detection API"
 )
 
-
 app.include_router(
-    router,
-    prefix="/api/v1"
+    fraud.router
 )
 
 
