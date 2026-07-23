@@ -27,5 +27,6 @@ class FraudDetectionService:
 
         return {
             "is_fraud": is_fraud,
-            "risk_level": "HIGH" if is_fraud else "LOW"
+            "risk_level": "HIGH" if is_fraud else "LOW",
+            "prediction": int(prediction)
         }
